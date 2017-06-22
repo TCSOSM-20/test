@@ -10,11 +10,11 @@ def Get_MDG(project) {
 
 def project_checkout() {
     // checkout the project
-    git url: "https://osm.etsi.org/gerrit/${env.GERRIT_PROJECT}"
+    git url: "https://osm.etsi.org/gerrit/${GERRIT_PROJECT}"
 
-    sh "git fetch origin ${env.GERRIT_REFSPEC}"
-    if (env.GERRIT_PATCHSET_REVISION.size() > 0 ) {
-        sh "git checkout -f ${env.GERRIT_PATCHSET_REVISION}"
+    sh "git fetch origin ${GERRIT_REFSPEC}"
+    if (GERRIT_PATCHSET_REVISION.size() > 0 ) {
+        sh "git checkout -f ${GERRIT_PATCHSET_REVISION}"
     }
 }
 
@@ -25,17 +25,17 @@ def devops_checkout() {
 }
 
 node {
-    mdg = Get_MDG("${env.GERRIT_PROJECT}")
+    mdg = Get_MDG("${GERRIT_PROJECT}")
     println("MDG is ${mdg}")
 
-    if ( env.GERRIT_EVENT_TYPE.equals('change-merged') ) {
+    if ( GERRIT_EVENT_TYPE.equals('change-merged') ) {
         def downstream_params = [
-            string(name: 'GERRIT_BRANCH', value: env.GERRIT_BRANCH),
-            string(name: 'GERRIT_PROJECT', value: env.GERRIT_PROJECT),
-            string(name: 'GERRIT_REFSPEC', value: env.GERRIT_REFSPEC),
-            string(name: 'GERRIT_PATCHSET_REVISION', value: env.GERRIT_PATCHSET_REVISION),
+            string(name: 'GERRIT_BRANCH', value: GERRIT_BRANCH),
+            string(name: 'GERRIT_PROJECT', value: GERRIT_PROJECT),
+            string(name: 'GERRIT_REFSPEC', value: GERRIT_REFSPEC),
+            string(name: 'GERRIT_PATCHSET_REVISION', value: GERRIT_PATCHSET_REVISION),
         ]
-        result = build job: "${mdg}/${env.GERRIT_BRANCH}", parameters: downstream_params, propagate: true
+        result = build job: "${mdg}/${GERRIT_BRANCH}", parameters: downstream_params, propagate: true
         if (result.getResult() != 'SUCCESS') {
             project = result.getProjectName()
             build = result.getNumber()
@@ -52,7 +52,7 @@ node {
             project_checkout()
         }
 
-        container_name = "${env.GERRIT_PROJECT}-${env.GERRIT_BRANCH}"
+        container_name = "${GERRIT_PROJECT}-${GERRIT_BRANCH}"
 
 
         stage('Docker-Build') {
