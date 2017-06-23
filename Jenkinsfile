@@ -1,3 +1,12 @@
+properties([
+    parameters([
+        string(defaultValue: env.GERRIT_BRANCH, description: '', name: 'GERRIT_BRANCH'),
+        string(defaultValue: env.GERRIT_PROJEC, description: '', name: 'GERRIT_PROJECT'),
+        string(defaultValue: env.GERRIT_REFSPEC, description: '', name: 'GERRIT_REFSPEC'),
+        string(defaultValue: env.GERRIT_PATCHSET_REVISION, description: '', name: 'GERRIT_PATCHSET_REVISION'),
+    ])
+])
+
 def Get_MDG(project) {
     // split the project.
     def values = project.split('/')
@@ -28,7 +37,9 @@ node {
     mdg = Get_MDG("${GERRIT_PROJECT}")
     println("MDG is ${mdg}")
 
-    if ( GERRIT_EVENT_TYPE.equals('change-merged') ) {
+    if ( env.GERRIT_EVENT_TYPE != null ) {
+        // pipeline running from gerrit trigger.
+        // kickoff the downstream multibranch pipeline
         def downstream_params = [
             string(name: 'GERRIT_BRANCH', value: GERRIT_BRANCH),
             string(name: 'GERRIT_PROJECT', value: GERRIT_PROJECT),
@@ -53,7 +64,6 @@ node {
         }
 
         container_name = "${GERRIT_PROJECT}-${GERRIT_BRANCH}"
-
 
         stage('Docker-Build') {
             sh "docker build -t ${container_name} ."
