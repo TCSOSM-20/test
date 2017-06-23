@@ -1,7 +1,7 @@
 properties([
     parameters([
         string(defaultValue: env.GERRIT_BRANCH, description: '', name: 'GERRIT_BRANCH'),
-        string(defaultValue: env.GERRIT_PROJEC, description: '', name: 'GERRIT_PROJECT'),
+        string(defaultValue: env.GERRIT_PROJECT, description: '', name: 'GERRIT_PROJECT'),
         string(defaultValue: env.GERRIT_REFSPEC, description: '', name: 'GERRIT_REFSPEC'),
         string(defaultValue: env.GERRIT_PATCHSET_REVISION, description: '', name: 'GERRIT_PATCHSET_REVISION'),
     ])
