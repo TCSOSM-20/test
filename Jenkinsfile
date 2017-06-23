@@ -7,6 +7,7 @@ properties([
     ])
 ])
 
+
 def Get_MDG(project) {
     // split the project.
     def values = project.split('/')
