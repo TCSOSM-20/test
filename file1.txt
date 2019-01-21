@@ -3,3 +3,4 @@ another line with content
 and here is yet another line
 this line was initially added to a branch
 and this one was contributed with a second branch
+and this one will be contributed (hopefully) via gerrit
