@@ -1,2 +1,7 @@
-Second file
+<<<<<<< e73427bfbfa58797dc64a37c36a6cc025482eb38
+Second file :-)
+>>>>>>> my changes on master
 With a new line
+other line
+
+other line
